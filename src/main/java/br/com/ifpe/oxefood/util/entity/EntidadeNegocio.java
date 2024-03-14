@@ -30,4 +30,3 @@ public abstract class EntidadeNegocio implements Serializable {
     private Boolean habilitado;
 
 }
-
