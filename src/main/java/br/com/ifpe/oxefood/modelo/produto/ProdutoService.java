@@ -2,10 +2,13 @@ package br.com.ifpe.oxefood.modelo.produto;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ifpe.oxefood.util.exception.EntidadeNaoEncontradaException;
+import br.com.ifpe.oxefood.util.exception.ProdutoException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -15,6 +18,10 @@ public class ProdutoService {
 
     @Transactional
     public Produto save(Produto produto) {
+
+        if (produto.getValorUnitario() < 100) {
+            throw new ProdutoException(ProdutoException.MSG_VALOR_MINIMO_PRODUTO);
+        }    
 
         produto.setHabilitado(Boolean.TRUE);
         produto.setVersao(1L);
@@ -27,7 +34,14 @@ public class ProdutoService {
     }
 
     public Produto obterPorID(Long id) {
-        return repository.findById(id).get();
+        // return repository.findById(id).get();
+        Optional<Produto> consulta = repository.findById(id);
+
+        if (consulta.isPresent()) {
+            return consulta.get();
+            } else {
+            throw new EntidadeNaoEncontradaException("Produto", id);
+            }
     }
 
     @Transactional

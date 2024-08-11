@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ifpe.oxefood.util.exception.ClienteNumeroException;
 import br.com.ifpe.oxefood.util.exception.EntidadeNaoEncontradaException;
 import jakarta.transaction.Transactional;
 
@@ -22,10 +23,17 @@ public class ClienteService {
     @Transactional
     public Cliente save(Cliente cliente) {
 
-        cliente.setHabilitado(Boolean.TRUE);
-        cliente.setVersao(1L);
-        cliente.setDataCriacao(LocalDate.now());
-        return repository.save(cliente);
+        if (cliente.getFoneCelular().contains("81")) {
+
+            cliente.setHabilitado(Boolean.TRUE);
+            cliente.setVersao(1L);
+            cliente.setDataCriacao(LocalDate.now());
+            return repository.save(cliente);
+        
+        } else {
+         
+            throw new ClienteNumeroException(ClienteNumeroException.MSG_SEM_DDD);
+        }
     }
 
     public List<Cliente> listarTodos() {
@@ -37,9 +45,9 @@ public class ClienteService {
         Optional<Cliente> consulta = repository.findById(id);
 
         if (consulta.isPresent()) {
-        return consulta.get();
+            return consulta.get();
         } else {
-        throw new EntidadeNaoEncontradaException("Cliente", id);
+            throw new EntidadeNaoEncontradaException("Cliente", id);
         }
     }
 
