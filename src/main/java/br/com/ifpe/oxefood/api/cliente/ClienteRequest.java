@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.ifpe.oxefood.modelo.cliente.Cliente;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -39,11 +40,16 @@ public class ClienteRequest {
 
     private String foneFixo;
 
+    @NotBlank(message = "O Email é de preenchimento obrigatório")
+    @Email
+    private String email;
+
     public Cliente build() {
 
         return Cliente.builder()
                 .nome(nome)
                 .dataNascimento(dataNascimento)
+                .email(email)
                 .cpf(cpf)
                 .foneCelular(foneCelular)
                 .foneFixo(foneFixo)

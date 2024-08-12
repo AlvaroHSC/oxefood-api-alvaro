@@ -26,10 +26,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Cliente extends EntidadeAuditavel {
-
+    
     @OneToMany(mappedBy = "cliente", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<EnderecoCliente> enderecos;
-
+    
     @Column(nullable = false, length = 100)
     private String nome;
 
@@ -41,7 +41,10 @@ public class Cliente extends EntidadeAuditavel {
 
     @Column
     private String foneCelular;
-
+    
     @Column
     private String foneFixo;
+    
+    @Column
+    private String email;
 }

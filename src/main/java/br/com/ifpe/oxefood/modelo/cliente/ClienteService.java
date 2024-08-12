@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ifpe.oxefood.modelo.mensagens.EmailService;
 import br.com.ifpe.oxefood.util.exception.ClienteNumeroException;
 import br.com.ifpe.oxefood.util.exception.EntidadeNaoEncontradaException;
 import jakarta.transaction.Transactional;
@@ -20,6 +21,9 @@ public class ClienteService {
     @Autowired
     private EnderecoClienteRepository enderecoClienteRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     @Transactional
     public Cliente save(Cliente cliente) {
 
@@ -28,7 +32,12 @@ public class ClienteService {
             cliente.setHabilitado(Boolean.TRUE);
             cliente.setVersao(1L);
             cliente.setDataCriacao(LocalDate.now());
-            return repository.save(cliente);
+            Cliente clienteSalvo = repository.save(cliente);
+        
+            emailService.enviarEmailConfirmacaoCadastroCliente(clienteSalvo);
+
+            // return repository.save(cliente);
+            return clienteSalvo;
         
         } else {
          
