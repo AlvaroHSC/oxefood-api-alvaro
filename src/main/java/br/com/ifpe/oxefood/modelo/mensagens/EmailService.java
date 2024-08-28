@@ -19,6 +19,9 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import br.com.ifpe.oxefood.modelo.cliente.Cliente;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 
 /**
  * @author Roberto Alencar
@@ -79,23 +82,23 @@ public class EmailService {
 
         emailSender = getJavaMailSender();
 
-        // MimeMessage message = emailSender.createMimeMessage();
+        MimeMessage message = emailSender.createMimeMessage();
 
-        // MimeMessageHelper helper = new MimeMessageHelper(message);
+        MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        // try {
+        try {
 
-        //     helper.setFrom(new InternetAddress("not.reply@delifacil.com.br"));
-        //     helper.setTo(to);
-        //     helper.setSubject(subject);
-        //     helper.setText(new String(content.getBytes(), StandardCharsets.ISO_8859_1), html);
-        //     helper.setEncodeFilenames(true);
+            helper.setFrom(new InternetAddress("not.reply@delifacil.com.br"));
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(new String(content.getBytes(), StandardCharsets.ISO_8859_1), html);
+            helper.setEncodeFilenames(true);
 
-        // } catch (MessagingException e) {
-        //     e.printStackTrace();
-        // }
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
 
-        // emailSender.send(message);
+        emailSender.send(message);
     }
 
     private JavaMailSender getJavaMailSender() {
